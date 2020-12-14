@@ -52,6 +52,7 @@ class CredentialsTabTests {
     homePage.chooseCredentialsTab();
     //
     CredentialsTab credentialsTab = new CredentialsTab(driver);
+    // this line fails - assertion error
     assertTrue(credentialsTab.pageLoaded());
     // add modal
     credentialsTab.addCredential();
