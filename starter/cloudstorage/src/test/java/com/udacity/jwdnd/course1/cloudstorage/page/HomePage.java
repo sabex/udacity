@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
+import lombok.SneakyThrows;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,8 +47,12 @@ public class HomePage {
     notesTab.click();
   }
 
-  public void chooseCredentialsTab() {
-    credentialsTab.click();
+  @SneakyThrows
+  public void chooseCredentialsTab(WebDriver driver) {
+    //    credentialsTab.click(); // does not do anything
+    JavascriptExecutor js= (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].click();", credentialsTab);
+    Thread.sleep(5000);
   }
 
   public boolean hasFilesTab() {

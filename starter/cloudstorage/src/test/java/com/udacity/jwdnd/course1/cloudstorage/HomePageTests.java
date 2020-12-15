@@ -56,7 +56,7 @@ class HomePageTests {
     // verify all tabs are displayed, the render of each tab is tested separately
     verifyUserHasAllTabs(homePage);
 
-    homePage.chooseCredentialsTab();
+    homePage.chooseCredentialsTab(driver);
     homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
 

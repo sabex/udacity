@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import com.udacity.jwdnd.course1.cloudstorage.page.CredentialsTab;
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CredentialsTabTests {
 
@@ -49,17 +51,23 @@ class CredentialsTabTests {
     TestUtils.loginUser(driver,appUrl,addCredUser);
     // go to Credentials tab
     HomePage homePage = new HomePage(driver);
-    homePage.chooseCredentialsTab();
+    // pause so i can see flow
+    try {Thread.sleep(5000);}catch (Exception e) {};
+    homePage.chooseCredentialsTab(driver);
     //
     CredentialsTab credentialsTab = new CredentialsTab(driver);
     // this line fails - assertion error
     assertTrue(credentialsTab.pageLoaded());
     // add modal
-    credentialsTab.addCredential();
+    credentialsTab.addCredentialModal(driver);
     // reload page from driver
-    driver.switchTo().activeElement();
     credentialsTab = new CredentialsTab(driver);
     assertTrue(credentialsTab.addCredModalLoaded());
+
+    // add values
+    credentialsTab.addDummyCredentials();
+    // submit  modal
+    credentialsTab.addCredential(driver);
     // assert changes show in page
     // assert password encrypted
     // assert success message
