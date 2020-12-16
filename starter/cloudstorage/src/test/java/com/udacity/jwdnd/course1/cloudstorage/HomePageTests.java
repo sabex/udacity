@@ -60,11 +60,11 @@ class HomePageTests {
     homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
 
-    homePage.chooseNotesTab();
+    homePage.chooseNotesTab(driver);
     homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
 
-    homePage.chooseFilesTab();
+    homePage.chooseFilesTab(driver);
     homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
   }

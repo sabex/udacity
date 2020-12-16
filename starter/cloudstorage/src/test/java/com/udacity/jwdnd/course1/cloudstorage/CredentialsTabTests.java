@@ -52,25 +52,26 @@ class CredentialsTabTests {
     // go to Credentials tab
     HomePage homePage = new HomePage(driver);
     // pause so i can see flow
-    try {Thread.sleep(5000);}catch (Exception e) {};
     homePage.chooseCredentialsTab(driver);
     //
     CredentialsTab credentialsTab = new CredentialsTab(driver);
-    // this line fails - assertion error
     assertTrue(credentialsTab.pageLoaded());
     // add modal
     credentialsTab.addCredentialModal(driver);
     // reload page from driver
     credentialsTab = new CredentialsTab(driver);
     assertTrue(credentialsTab.addCredModalLoaded());
-
     // add values
-    credentialsTab.addDummyCredentials();
+    credentialsTab.addDummyCredentials(driver);
     // submit  modal
     credentialsTab.addCredential(driver);
+    // redirects to home so need to reselect the credentials tab
+    // TODO
+
     // assert changes show in page
     // assert password encrypted
     // assert success message
+    TestUtils.pause(5000);
   }
 
   @Test

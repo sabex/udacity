@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
+import com.udacity.jwdnd.course1.cloudstorage.TestUtils;
 import lombok.SneakyThrows;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -7,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
 
@@ -39,20 +42,27 @@ public class HomePage {
       return (logoutButton.getText() != null);
   }
 
-  public void chooseFilesTab() {
-    filesTab.click();
+  public void chooseFilesTab(WebDriver driver) {
+    JavascriptExecutor js= (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].click();", filesTab);
+//    WebDriverWait wait = new WebDriverWait(driver, 20);
+//    wait.until(ExpectedConditions.elementToBeClickable(filesTab)).click();
   }
 
-  public void chooseNotesTab() {
-    notesTab.click();
+  public void chooseNotesTab(WebDriver driver) {
+    JavascriptExecutor js= (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].click();", notesTab);
+//    WebDriverWait wait = new WebDriverWait(driver, 20);
+//    wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
   }
 
   @SneakyThrows
   public void chooseCredentialsTab(WebDriver driver) {
-    //    credentialsTab.click(); // does not do anything
+//    WebDriverWait wait = new WebDriverWait(driver, 20);
+//    wait.until(ExpectedConditions.elementToBeClickable(credentialsTab)).click();   // nothing happens not even a timeout
+//    credentialsTab.click();      // nothing happens
     JavascriptExecutor js= (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", credentialsTab);
-    Thread.sleep(5000);
   }
 
   public boolean hasFilesTab() {

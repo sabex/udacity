@@ -62,4 +62,8 @@ public class TestUtils {
         LoginPage loginPage = getLoginPage(driver, appUrl);
         loginPage.login(userName, GOOD_PASSWORD);
     }
+
+    public static void pause(Integer millis) {
+        try {Thread.sleep(millis);}catch (Exception e) {};
+    }
 }

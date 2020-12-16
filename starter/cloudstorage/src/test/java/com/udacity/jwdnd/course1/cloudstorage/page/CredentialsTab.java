@@ -1,10 +1,12 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
+import com.udacity.jwdnd.course1.cloudstorage.TestUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -37,9 +39,9 @@ public class CredentialsTab {
   }
 
   public void addCredentialModal(WebDriver driver) {
-//    addCredential.click(); causes ElementNotInteractable, using JSE as workaround
-    JavascriptExecutor js= (JavascriptExecutor) driver;
-    js.executeScript("arguments[0].click();", addCredential);
+    TestUtils.pause(500);
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    wait.until(ExpectedConditions.elementToBeClickable(addCredential)).click();
   }
 
   // utility to check if page loaded, existence of credential table is used to check
@@ -53,19 +55,14 @@ public class CredentialsTab {
   }
 
   public void addCredential(WebDriver driver) {
-//    saveCredential.click();    // this does not work
-    JavascriptExecutor js= (JavascriptExecutor) driver;
-    js.executeScript("arguments[0].click();", saveCredential);
-    try {Thread.sleep(5000);}catch (Exception e) {};
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    wait.until(ExpectedConditions.elementToBeClickable(saveCredential)).click();
   }
 
-  public void addDummyCredentials() {
-    log.error("enabled" + credentialUrl.isEnabled());
-    log.error(credentialUrl.getAttribute("id"));
-    try {Thread.sleep(5000);}catch (Exception e) {};
-    // org.openqa.selenium.ElementNotInteractableException: element not interactable - unless i sleep first
-    credentialUrl.sendKeys("http://localhost:8080/chat");
-    credentialUsername.sendKeys("chatbot");
-    credentialPassword.sendKeys("chatPassword");
+  public void addDummyCredentials(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).sendKeys("http://localhost:8080/chat");
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUsername)).sendKeys("chatbot");
+    wait.until(ExpectedConditions.elementToBeClickable(credentialPassword)).sendKeys("chatPassword");
   }
 }
