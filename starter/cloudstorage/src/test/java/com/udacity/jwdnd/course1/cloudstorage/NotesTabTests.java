@@ -1,17 +1,14 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
-import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
-import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
+import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,26 +39,43 @@ class NotesTabTests {
   }
 
   @Test
-  public void userCanAddNote() {
-//    driver.findElement(By.id("nav-notes-tab")).click();
-//    TestUtils.pause(2000);
-//    WebDriverWait wait = new WebDriverWait(driver, 20);
-//    wait.until(ExpectedConditions.elementToBeClickable(By.id("addNoteButton"))).click();
-//    wait.until(ExpectedConditions.elementToBeClickable(By.id("note-title"))).sendKeys("To-Do");
-//    wait.until(ExpectedConditions.elementToBeClickable(By.id("note-description")))
-//        .sendKeys("Good work done here");
-//    TestUtils.pause(2000);
-//    wait.until(ExpectedConditions.elementToBeClickable(By.id("notesClick"))).click();
-//    driver.navigate().to(appUrl + "/home");
-//    driver.findElement(By.id("nav-notes-tab")).click();
-//    TestUtils.pause(2000);
-    assertTrue(false);
+  public void userCanAddAndDeleteNote() {
     /**
      * Write a Selenium test that logs in an existing user, creates a note and verifies that the
      * note details are visible in the note list.
      */
+    String addNoteUser = "addNoteUser";
+    TestUtils.registerUser(driver, appUrl, addNoteUser);
+    TestUtils.loginUser(driver,appUrl,addNoteUser);
+    // go to Notes tab
+    HomePage homePage = new HomePage(driver);
+    homePage.chooseNotesTab(driver);
+    //
+    NotesTab notesTab = new NotesTab(driver);
+    assertTrue(notesTab.pageLoaded());
+    // add modal
+    notesTab.addNoteModal(driver);
+    // reload page from driver
+    notesTab = new NotesTab(driver);
+    assertTrue(notesTab.addNoteModalLoaded());
+    // add values
+    notesTab.addDummyNote(driver);
+    // submit  modal
+    notesTab.addNote(driver);
+    // redirects to home so need to reselect the Notes tab
+    homePage = new HomePage(driver);
+    homePage.chooseNotesTab(driver);
     // assert changes show in page
-    // assert success message
+    notesTab = new NotesTab(driver);
+    assertTrue(notesTab.isNoteInPage());
+    // now delete it
+    notesTab.deleteNote(driver);
+    // verify deleted
+    homePage = new HomePage(driver);
+    homePage.chooseNotesTab(driver);
+    // assert changes show in page
+    notesTab = new NotesTab(driver);
+    assertFalse(notesTab.isNoteInPage());
   }
 
   @Test
@@ -72,26 +86,6 @@ class NotesTabTests {
      * button on an existing note, changes the note data, saves the changes, and verifies that the
      * changes appear in the note list.
      */
-    // assert changes show in page
-    // assert success message
-  }
-
-  @Test
-  public void userCanDeleteNote() {
-    assertTrue(false);
-    /**
-     * Write a Selenium test that logs in an existing user with existing notes, clicks the delete
-     * note button on an existing note, and verifies that the note no longer appears in the note
-     * list.
-     */
-    // assert changes show in page
-    // assert success message
-  }
-
-  @Test
-  public void errorMessageOn() {
-    // will need multiple one we know the validations
-    assertTrue(false);
     // assert changes show in page
     // assert success message
   }

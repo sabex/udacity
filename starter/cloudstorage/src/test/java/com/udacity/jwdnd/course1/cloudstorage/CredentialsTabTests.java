@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
@@ -45,13 +46,12 @@ class CredentialsTabTests {
   }
 
   @Test
-  public void userCanAddCredential() {
+  public void userCanAddAndRemoveCredential() {
     String addCredUser = "addCredUser";
     TestUtils.registerUser(driver, appUrl, addCredUser);
     TestUtils.loginUser(driver,appUrl,addCredUser);
     // go to Credentials tab
     HomePage homePage = new HomePage(driver);
-    // pause so i can see flow
     homePage.chooseCredentialsTab(driver);
     //
     CredentialsTab credentialsTab = new CredentialsTab(driver);
@@ -66,12 +66,21 @@ class CredentialsTabTests {
     // submit  modal
     credentialsTab.addCredential(driver);
     // redirects to home so need to reselect the credentials tab
-    // TODO
-
+    homePage = new HomePage(driver);
+    homePage.chooseCredentialsTab(driver);
     // assert changes show in page
+    credentialsTab = new CredentialsTab(driver);
+    assertTrue(credentialsTab.isCredentialInPage());
     // assert password encrypted
+    assertTrue(credentialsTab.isPasswordEncrypted());
     // assert success message
-    TestUtils.pause(5000);
+    credentialsTab.deleteCredential(driver);
+    // redirects to home so need to reselect the credentials tab
+    homePage = new HomePage(driver);
+    homePage.chooseCredentialsTab(driver);
+    // assert changes show in page
+    credentialsTab = new CredentialsTab(driver);
+    assertFalse(credentialsTab.isCredentialInPage());
   }
 
   @Test
@@ -79,21 +88,6 @@ class CredentialsTabTests {
     assertTrue(false);
     // assert changes show in page
     // assert password not encrypted
-    // assert success message
-  }
-
-  @Test
-  public void userCanDeleteCredential() {
-    assertTrue(false);
-    // assert changes show in page
-    // assert success message
-  }
-
-  @Test
-  public void errorMessageOn() {
-    // will need multiple one we know the validations
-    assertTrue(false);
-    // assert changes show in page
     // assert success message
   }
 

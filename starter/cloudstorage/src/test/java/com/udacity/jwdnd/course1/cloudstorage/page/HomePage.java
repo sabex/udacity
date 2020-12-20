@@ -45,22 +45,15 @@ public class HomePage {
   public void chooseFilesTab(WebDriver driver) {
     JavascriptExecutor js= (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", filesTab);
-//    WebDriverWait wait = new WebDriverWait(driver, 20);
-//    wait.until(ExpectedConditions.elementToBeClickable(filesTab)).click();
   }
 
   public void chooseNotesTab(WebDriver driver) {
     JavascriptExecutor js= (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", notesTab);
-//    WebDriverWait wait = new WebDriverWait(driver, 20);
-//    wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
   }
 
   @SneakyThrows
   public void chooseCredentialsTab(WebDriver driver) {
-//    WebDriverWait wait = new WebDriverWait(driver, 20);
-//    wait.until(ExpectedConditions.elementToBeClickable(credentialsTab)).click();   // nothing happens not even a timeout
-//    credentialsTab.click();      // nothing happens
     JavascriptExecutor js= (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", credentialsTab);
   }

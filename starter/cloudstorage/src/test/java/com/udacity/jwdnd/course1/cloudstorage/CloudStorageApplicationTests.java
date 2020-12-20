@@ -1,10 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
-import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
-import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
+import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
@@ -44,7 +43,36 @@ class CloudStorageApplicationTests {
     String E2Eusername = "E2Eusername";
     // signup
     TestUtils.registerUser(driver, appUrl, E2Eusername);
+    addUserData(E2Eusername);
+    // verify logged out
+    LoginPage loginPage = new LoginPage(driver);
+    assertTrue(loginPage.pageLoaded());
 
+    // verify cannot get to home page
+    verifyNeedToBeLoggedOnToAccessHome();
+
+    // user sees their data after logon again
+    loginPage = TestUtils.getLoginPage(driver, appUrl);
+    loginPage.login(E2Eusername,TestUtils.GOOD_PASSWORD);
+    // check files
+    HomePage homePage = TestUtils.getHomePage(driver, appUrl);
+    homePage.chooseFilesTab(driver);
+    FilesTab filesTab = new FilesTab(driver);
+    assertTrue(filesTab.isFileUploaded());
+    // check notes
+    homePage = TestUtils.getHomePage(driver, appUrl);
+    homePage.chooseNotesTab(driver);
+    NotesTab notesTab = new NotesTab(driver);
+    assertTrue(notesTab.pageLoaded());
+    assertTrue(notesTab.isNoteInPage());
+    // check credentials
+    homePage = TestUtils.getHomePage(driver, appUrl);
+    homePage.chooseCredentialsTab(driver);
+    CredentialsTab credentialsTab = new CredentialsTab(driver);
+    assertTrue(credentialsTab.isCredentialInPage());
+  }
+
+  private void addUserData(String E2Eusername) {
     // login with signed up user
     LoginPage loginPage = TestUtils.getLoginPage(driver, appUrl);
     TestUtils.verifyLoginPageLoads(loginPage);
@@ -54,33 +82,75 @@ class CloudStorageApplicationTests {
     assertTrue(driver.getCurrentUrl().contains(HomePage.HOME_PATH));
     HomePage homePage = new HomePage(driver);
 
-    // user can add a file
+    // user add file (tests to prove can add are in FilesTabTests.java
+    homePage.chooseFilesTab(driver);
+    FilesTab filesTab = new FilesTab(driver);
+    assertTrue(filesTab.pageLoaded());
+    // upload file
+    filesTab.upload();
+    // redirects to home so need to reload
+    homePage = new HomePage(driver);
     // user can add a note
-    // user can a credential
-
+    homePage.chooseNotesTab(driver);
+    //
+    NotesTab notesTab = new NotesTab(driver);
+    assertTrue(notesTab.pageLoaded());
+    // add modal
+    notesTab.addNoteModal(driver);
+    // reload page from driver
+    notesTab = new NotesTab(driver);
+    assertTrue(notesTab.addNoteModalLoaded());
+    // add values
+    notesTab.addDummyNote(driver);
+    // submit  modal
+    notesTab.addNote(driver);
+    // user can add a credential
+    homePage = new HomePage(driver);
+    homePage.chooseCredentialsTab(driver);
+    //
+    CredentialsTab credentialsTab = new CredentialsTab(driver);
+    assertTrue(credentialsTab.pageLoaded());
+    // add modal
+    credentialsTab.addCredentialModal(driver);
+    // reload page from driver
+    credentialsTab = new CredentialsTab(driver);
+    assertTrue(credentialsTab.addCredModalLoaded());
+    // add values
+    credentialsTab.addDummyCredentials(driver);
+    // submit  modal
+    credentialsTab.addCredential(driver);
+    // redirects to home so need to reselect the credentials tab
+    homePage = new HomePage(driver);
     // logout
     verifyCanLogout(driver, homePage);
-
-    // verify logged out
-    loginPage = new LoginPage(driver);
-    assertTrue(loginPage.pageLoaded());
-
-    // verify cannot get to home page
-    verifyNeedToBeLoggedOnToAccessHome();
-
-    // user sees their data after logon again
-    loginPage = TestUtils.getLoginPage(driver, appUrl);
-    loginPage.login(E2Eusername,TestUtils.GOOD_PASSWORD);
-    // notes
-    // files
-    // credentials
   }
 
   @Test
   public void userCannotSeeOtherUsersData() {
-    assertTrue(false);
+    String username = "multiusername1";
     // register user, login and add file, cred and note. logout
+    TestUtils.registerUser(driver, appUrl, username);
+    addUserData(username);
     // register other user, login and verify no file, cred or note listed
+    // register second user and login
+    TestUtils.registerUser(driver,appUrl, "multiusername2");
+    TestUtils.loginUser(driver, appUrl, "multiusername2");
+    // expect no files
+    HomePage homePage = TestUtils.getHomePage(driver, appUrl);
+    homePage.chooseFilesTab(driver);
+    FilesTab filesTab = new FilesTab(driver);
+    assertFalse(filesTab.isFileUploaded());
+    // expect no notes
+    homePage = TestUtils.getHomePage(driver, appUrl);
+    homePage.chooseNotesTab(driver);
+    NotesTab notesTab = new NotesTab(driver);
+    assertTrue(notesTab.pageLoaded());
+    assertFalse(notesTab.isNoteInPage());
+    // expect no credentials
+    homePage = TestUtils.getHomePage(driver, appUrl);
+    homePage.chooseCredentialsTab(driver);
+    CredentialsTab credentialsTab = new CredentialsTab(driver);
+    assertFalse(credentialsTab.isCredentialInPage());
   }
 
   // utility methods

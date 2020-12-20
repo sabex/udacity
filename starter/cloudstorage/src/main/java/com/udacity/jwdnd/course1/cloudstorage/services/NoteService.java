@@ -25,4 +25,8 @@ public class NoteService {
     public List<Note> getNotes (User user) {
         return noteMapper.getNotes(user);
     }
+
+    public int deleteNote (Integer noteId, User user) {
+        return noteMapper.delete(user, noteId);
+    }
 }

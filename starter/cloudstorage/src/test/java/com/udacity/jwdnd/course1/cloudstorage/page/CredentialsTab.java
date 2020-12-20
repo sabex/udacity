@@ -39,7 +39,7 @@ public class CredentialsTab {
   }
 
   public void addCredentialModal(WebDriver driver) {
-    TestUtils.pause(500);
+//    TestUtils.pause(500);
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(addCredential)).click();
   }
@@ -64,5 +64,29 @@ public class CredentialsTab {
     wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).sendKeys("http://localhost:8080/chat");
     wait.until(ExpectedConditions.elementToBeClickable(credentialUsername)).sendKeys("chatbot");
     wait.until(ExpectedConditions.elementToBeClickable(credentialPassword)).sendKeys("chatPassword");
+  }
+
+  public boolean isCredentialInPage() {
+    // test uses a new user so credential will be the first one in the list
+    try{
+      WebElement credential =
+          credentialTable.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th"));
+      return (credential.getAttribute("textContent").equalsIgnoreCase("http://localhost:8080/chat"));
+    }
+    catch (NoSuchElementException nse) {
+      return false;
+    }
+  }
+
+  public boolean isPasswordEncrypted() {
+    // test uses a new user so credential will be the first one in the list
+    WebElement credential = credentialTable.findElement(By.xpath("//*[@id='credentialTable']/tbody[1]/tr/td[3]"));
+    return !(credential.getAttribute("textContent").equalsIgnoreCase("chatPassword"));
+  }
+
+  public void deleteCredential(WebDriver driver) {
+    WebElement element = credentialTable.findElement(By.xpath("//*[@id='credentialTable']/tbody[1]/tr/td[1]/a"));
+    JavascriptExecutor js= (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].click();", element);
   }
 }
