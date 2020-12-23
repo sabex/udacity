@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.setupCredentialForUser;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,44 +52,47 @@ class CredentialsTabTests {
     TestUtils.registerUser(driver, appUrl, addCredUser);
     TestUtils.loginUser(driver,appUrl,addCredUser);
     // go to Credentials tab
-    HomePage homePage = new HomePage(driver);
-    homePage.chooseCredentialsTab(driver);
-    //
-    CredentialsTab credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.pageLoaded());
-    // add modal
-    credentialsTab.addCredentialModal(driver);
-    // reload page from driver
-    credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.addCredModalLoaded());
-    // add values
-    credentialsTab.addDummyCredentials(driver);
-    // submit  modal
-    credentialsTab.addCredential(driver);
-    // redirects to home so need to reselect the credentials tab
-    homePage = new HomePage(driver);
-    homePage.chooseCredentialsTab(driver);
-    // assert changes show in page
-    credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.isCredentialInPage());
-    // assert password encrypted
-    assertTrue(credentialsTab.isPasswordEncrypted());
+    CredentialsTab credentialsTab = setupCredentialForUser(driver);
     // assert success message
     credentialsTab.deleteCredential(driver);
     // redirects to home so need to reselect the credentials tab
-    homePage = new HomePage(driver);
+    HomePage homePage = new HomePage(driver);
     homePage.chooseCredentialsTab(driver);
     // assert changes show in page
     credentialsTab = new CredentialsTab(driver);
-    assertFalse(credentialsTab.isCredentialInPage());
+    assertFalse(credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
   }
+
 
   @Test
   public void userCanEditCredential() {
-    assertTrue(false);
-    // assert changes show in page
+    /**
+     * Write a Selenium test that logs in an existing user with existing credentials, clicks the edit note
+     * button on an existing credential, changes the credential data, saves the changes, and verifies that the
+     * changes appear in the credentials list.
+     */
+    String addCredUser = "editCredUser";
+    TestUtils.registerUser(driver, appUrl, addCredUser);
+    TestUtils.loginUser(driver,appUrl,addCredUser);
+    // go to Credentials tab
+    CredentialsTab credentialsTab = setupCredentialForUser(driver);
+    // edit modal
+    credentialsTab.editCredentialModal(driver);
+    // reload page from driver
+    credentialsTab = new CredentialsTab(driver);
+    assertTrue(credentialsTab.addCredModalLoaded());
     // assert password not encrypted
-    // assert success message
+    credentialsTab = new CredentialsTab(driver);
+    assertFalse(credentialsTab.isPasswordEncryptedInModal());
+    // add values
+    credentialsTab.editDummyCredentials(driver);
+    // submit
+    credentialsTab.saveCredential(driver);
+    // assert changes show in page
+    HomePage homePage = new HomePage(driver);
+    homePage.chooseCredentialsTab(driver);
+    credentialsTab = new CredentialsTab(driver);
+    assertTrue(credentialsTab.isCredentialInPage(CredentialsTab.EDITED_URL, CredentialsTab.EDITED_USERNAME));
   }
 
 }

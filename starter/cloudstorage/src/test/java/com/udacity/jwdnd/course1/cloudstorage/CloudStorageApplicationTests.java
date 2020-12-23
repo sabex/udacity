@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -64,12 +65,12 @@ class CloudStorageApplicationTests {
     homePage.chooseNotesTab(driver);
     NotesTab notesTab = new NotesTab(driver);
     assertTrue(notesTab.pageLoaded());
-    assertTrue(notesTab.isNoteInPage());
+    assertTrue(notesTab.isNoteInPage(NotesTab.DUMMY_NOTE_TITLE, NotesTab.DUMMY_NOTE_DESC));
     // check credentials
     homePage = TestUtils.getHomePage(driver, appUrl);
     homePage.chooseCredentialsTab(driver);
     CredentialsTab credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.isCredentialInPage());
+    assertTrue(credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
   }
 
   private void addUserData(String E2Eusername) {
@@ -83,43 +84,13 @@ class CloudStorageApplicationTests {
     HomePage homePage = new HomePage(driver);
 
     // user add file (tests to prove can add are in FilesTabTests.java
-    homePage.chooseFilesTab(driver);
-    FilesTab filesTab = new FilesTab(driver);
-    assertTrue(filesTab.pageLoaded());
-    // upload file
-    filesTab.upload();
-    // redirects to home so need to reload
-    homePage = new HomePage(driver);
-    // user can add a note
-    homePage.chooseNotesTab(driver);
-    //
-    NotesTab notesTab = new NotesTab(driver);
-    assertTrue(notesTab.pageLoaded());
-    // add modal
-    notesTab.addNoteModal(driver);
-    // reload page from driver
-    notesTab = new NotesTab(driver);
-    assertTrue(notesTab.addNoteModalLoaded());
-    // add values
-    notesTab.addDummyNote(driver);
-    // submit  modal
-    notesTab.addNote(driver);
+    FilesTab filesTab = setupFileForUser(driver);
+    // add a note
+    NotesTab notesTab = setupNoteForUser(driver);
     // user can add a credential
-    homePage = new HomePage(driver);
-    homePage.chooseCredentialsTab(driver);
-    //
-    CredentialsTab credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.pageLoaded());
-    // add modal
-    credentialsTab.addCredentialModal(driver);
-    // reload page from driver
-    credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.addCredModalLoaded());
-    // add values
-    credentialsTab.addDummyCredentials(driver);
-    // submit  modal
-    credentialsTab.addCredential(driver);
-    // redirects to home so need to reselect the credentials tab
+    CredentialsTab credentialsTab = setupCredentialForUser(driver);
+
+    // redirects to home so need to reload page
     homePage = new HomePage(driver);
     // logout
     verifyCanLogout(driver, homePage);
@@ -145,12 +116,12 @@ class CloudStorageApplicationTests {
     homePage.chooseNotesTab(driver);
     NotesTab notesTab = new NotesTab(driver);
     assertTrue(notesTab.pageLoaded());
-    assertFalse(notesTab.isNoteInPage());
+    assertFalse(notesTab.isNoteInPage(NotesTab.DUMMY_NOTE_TITLE, NotesTab.DUMMY_NOTE_DESC));
     // expect no credentials
     homePage = TestUtils.getHomePage(driver, appUrl);
     homePage.chooseCredentialsTab(driver);
     CredentialsTab credentialsTab = new CredentialsTab(driver);
-    assertFalse(credentialsTab.isCredentialInPage());
+    assertFalse(credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
   }
 
   // utility methods

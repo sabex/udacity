@@ -41,6 +41,10 @@ public class FileService {
         return fileMapper.getFiles(user);
     }
 
+    public File getFile (User user, Integer fileId) {
+        return fileMapper.getFile(user, fileId);
+    }
+
     public boolean isFileNameExists(User user, String filename){
         File file = fileMapper.getFileByName(user, filename);
         return (file != null);

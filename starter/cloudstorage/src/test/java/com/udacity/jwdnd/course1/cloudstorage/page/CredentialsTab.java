@@ -34,14 +34,26 @@ public class CredentialsTab {
   @FindBy(id="credential-password")
   private WebElement credentialPassword;
 
+  public static final String DUMMY_URL = "http://localhost:8080/chat";
+  public static final String DUMMY_USERNAME = "chatbot";
+  public static final String DUMMY_PASSWORD = "chatPassword";
+  public static final String EDITED_URL = "http://localhost:8080/credentials";
+  public static final String EDITED_USERNAME = "editbot";
+  public static final String EDITED_PASSWORD = "editPassword";
+
   public CredentialsTab(WebDriver webDriver) {
     PageFactory.initElements(webDriver, this);
   }
 
   public void addCredentialModal(WebDriver driver) {
-//    TestUtils.pause(500);
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(addCredential)).click();
+  }
+
+  public void editCredentialModal(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    WebElement webElement = credentialTable.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[1]/button"));
+    wait.until(ExpectedConditions.elementToBeClickable(webElement)).click();
   }
 
   // utility to check if page loaded, existence of credential table is used to check
@@ -54,24 +66,41 @@ public class CredentialsTab {
     return (saveCredential.isEnabled());
   }
 
-  public void addCredential(WebDriver driver) {
+  public void saveCredential(WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(saveCredential)).click();
   }
 
   public void addDummyCredentials(WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, 5);
-    wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).sendKeys("http://localhost:8080/chat");
-    wait.until(ExpectedConditions.elementToBeClickable(credentialUsername)).sendKeys("chatbot");
-    wait.until(ExpectedConditions.elementToBeClickable(credentialPassword)).sendKeys("chatPassword");
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).sendKeys(DUMMY_URL);
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUsername)).sendKeys(DUMMY_USERNAME);
+    wait.until(ExpectedConditions.elementToBeClickable(credentialPassword)).sendKeys(DUMMY_PASSWORD);
+  }
+  public void editDummyCredentials(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).clear();
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).sendKeys(EDITED_URL);
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUsername)).clear();
+    wait.until(ExpectedConditions.elementToBeClickable(credentialUsername)).sendKeys(EDITED_USERNAME);
+    wait.until(ExpectedConditions.elementToBeClickable(credentialPassword)).clear();
+    wait.until(ExpectedConditions.elementToBeClickable(credentialPassword)).sendKeys(EDITED_PASSWORD);
   }
 
-  public boolean isCredentialInPage() {
+  public boolean isPasswordEncryptedInModal() {
+    // if password on form matches the password saved, then its not encrypted
+    return !(DUMMY_PASSWORD.equalsIgnoreCase(credentialPassword.getAttribute("value")));
+  }
+
+  public boolean isCredentialInPage(String url, String username) {
     // test uses a new user so credential will be the first one in the list
     try{
-      WebElement credential =
+      WebElement credentialUrl =
           credentialTable.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th"));
-      return (credential.getAttribute("textContent").equalsIgnoreCase("http://localhost:8080/chat"));
+      WebElement credentialUsername =
+              credentialTable.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[2]"));
+      return (credentialUrl.getAttribute("textContent").equalsIgnoreCase(url)
+      && credentialUsername.getAttribute("textContent").equalsIgnoreCase(username));
     }
     catch (NoSuchElementException nse) {
       return false;

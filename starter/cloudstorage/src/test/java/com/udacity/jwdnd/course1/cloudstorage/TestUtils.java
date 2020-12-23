@@ -1,9 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
-import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
-import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
-import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
-import org.junit.jupiter.api.Assertions;
+import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -65,5 +62,74 @@ public class TestUtils {
 
     public static void pause(Integer millis) {
         try {Thread.sleep(millis);}catch (Exception e) {};
+    }
+
+    public static NotesTab setupNoteForUser(WebDriver driver) {
+        // go to Notes tab
+        HomePage homePage = new HomePage(driver);
+        homePage.chooseNotesTab(driver);
+        //
+        NotesTab notesTab = new NotesTab(driver);
+        assertTrue(notesTab.pageLoaded());
+        // add modal
+        notesTab.addNoteModal(driver);
+        // reload page from driver
+        notesTab = new NotesTab(driver);
+        assertTrue(notesTab.addNoteModalLoaded());
+        // add values
+        notesTab.addDummyNote(driver);
+        // submit  modal
+        notesTab.saveNote(driver);
+        // redirects to home so need to reselect the Notes tab
+        homePage = new HomePage(driver);
+        homePage.chooseNotesTab(driver);
+        // assert changes show in page
+        notesTab = new NotesTab(driver);
+        assertTrue(notesTab.isNoteInPage(NotesTab.DUMMY_NOTE_TITLE, NotesTab.DUMMY_NOTE_DESC));
+        return notesTab;
+    }
+
+    public static CredentialsTab setupCredentialForUser(WebDriver driver) {
+        HomePage homePage = new HomePage(driver);
+        homePage.chooseCredentialsTab(driver);
+        //
+        CredentialsTab credentialsTab = new CredentialsTab(driver);
+        assertTrue(credentialsTab.pageLoaded());
+        // add modal
+        credentialsTab.addCredentialModal(driver);
+        // reload page from driver
+        credentialsTab = new CredentialsTab(driver);
+        assertTrue(credentialsTab.addCredModalLoaded());
+        // add values
+        credentialsTab.addDummyCredentials(driver);
+        // submit  modal
+        credentialsTab.saveCredential(driver);
+        // redirects to home so need to reselect the credentials tab
+        homePage = new HomePage(driver);
+        homePage.chooseCredentialsTab(driver);
+        // assert changes show in page
+        credentialsTab = new CredentialsTab(driver);
+        assertTrue(credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
+        // assert password encrypted
+        assertTrue(credentialsTab.isPasswordEncrypted());
+        return credentialsTab;
+    }
+
+
+    public static FilesTab setupFileForUser(WebDriver driver) {
+        HomePage homePage = new HomePage(driver);
+        homePage.chooseFilesTab(driver);
+        //
+        FilesTab filesTab = new FilesTab(driver);
+        assertTrue(filesTab.pageLoaded());
+        // upload file
+        filesTab.upload();
+        // redirects to home so need to reselect the Files tab
+        homePage = new HomePage(driver);
+        homePage.chooseFilesTab(driver);
+        // assert changes show in page
+        filesTab = new FilesTab(driver);
+        assertTrue(filesTab.isFileUploaded());
+        return filesTab;
     }
 }

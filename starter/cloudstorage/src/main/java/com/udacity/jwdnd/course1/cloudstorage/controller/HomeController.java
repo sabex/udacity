@@ -9,6 +9,10 @@ import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,30 +64,45 @@ public class HomeController {
   }
 
   @PostMapping("/credential")
-  public String addCredential(Authentication authentication, Model model, Credential credential) {
+  public String addOrUpdateCredential(
+      Authentication authentication, Model model, Credential credential) {
     User user = userService.getUser(authentication.getName());
-    Integer result = credentialService.createCredential(credential, user);
-    if (result < 1) {
-      model.addAttribute("message", "add credential failed");
+    // check if update or create by checking value of credential id
+    if (null != credential.getCredentialid() && credential.getCredentialid() > 0) { // update
+      Integer result = credentialService.updateCredential(credential, user);
+      if (result < 1) {
+        model.addAttribute("message", "update credential failed");
+      }
+    } else { // create
+      Integer result = credentialService.createCredential(credential, user);
+      if (result < 1) {
+        model.addAttribute("message", "add credential failed");
+      }
     }
     return ("redirect:/home");
   }
 
   @GetMapping("/credential/{credentialId}")
-  public String deleteCredential(@PathVariable Integer credentialId, Authentication authentication) {
+  public String deleteCredential(
+      @PathVariable Integer credentialId, Authentication authentication) {
     User user = userService.getUser(authentication.getName());
     Integer result = credentialService.deleteCredential(credentialId, user);
     return "redirect:/home";
   }
 
   @PostMapping("/note")
-  public String addNote(Authentication authentication, Model model, Note note) {
+  public String addOrUpdateNote(Authentication authentication, Model model, Note note) {
     User user = userService.getUser(authentication.getName());
-    Integer result = noteService.createNote(note, user);
-    if (result < 1) {
-      model.addAttribute("message", "add note Failed");
+    if (null != note.getNoteid() && note.getNoteid() > 0) { // update
+      Integer result = noteService.updateNote(note, user);
+      if (result < 1) {
+        model.addAttribute("message", "update note Failed");
+      }
     } else {
-      model.addAttribute("message", "File " + note.getNoteTitle() + " Added successfully");
+      Integer result = noteService.createNote(note, user);
+      if (result < 1) {
+        model.addAttribute("message", "add note Failed");
+      }
     }
 
     return "redirect:/home";
@@ -118,5 +137,17 @@ public class HomeController {
     User user = userService.getUser(authentication.getName());
     Integer result = fileService.deleteFile(fileId, user);
     return "redirect:/home";
+  }
+
+  @GetMapping("/file/download/{fileId}")
+  public ResponseEntity downloadFile(@PathVariable Integer fileId, Authentication authentication) {
+    log.warn("in controller " + fileId);
+    User user = userService.getUser(authentication.getName());
+    File file = fileService.getFile(user, fileId);
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(file.getContentType()))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
+            .body(new ByteArrayResource(file.getFileData()));
+
   }
 }

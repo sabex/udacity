@@ -19,7 +19,11 @@ public class NoteService {
     }
 
     public int createNote (Note note, User user) {
-        return (noteMapper.insert(note, user));
+        return (noteMapper.insert(user, note));
+    }
+
+    public int updateNote (Note note, User user) {
+        return (noteMapper.update(user, note));
     }
 
     public List<Note> getNotes (User user) {
@@ -29,4 +33,5 @@ public class NoteService {
     public int deleteNote (Integer noteId, User user) {
         return noteMapper.delete(user, noteId);
     }
+
 }

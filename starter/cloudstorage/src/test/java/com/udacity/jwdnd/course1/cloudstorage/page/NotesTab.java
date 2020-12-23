@@ -8,8 +8,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
-
 @Slf4j
 public class NotesTab {
 
@@ -37,10 +35,20 @@ public class NotesTab {
     PageFactory.initElements(webDriver, this);
   }
 
+  public static final String DUMMY_NOTE_TITLE = "A dummy note";
+  public static final String DUMMY_NOTE_DESC = "A dummy note description";
+  public static final String EDITED_NOTE_TITLE = "A dummy note edited";
+  public static final String EDITED_NOTE_DESC = "A dummy note description edited";
+
   public void addNoteModal(WebDriver driver) {
-    TestUtils.pause(500);
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(addNote)).click();
+  }
+
+  public void editNoteModal(WebDriver driver) {
+    WebElement webElement = notesTable.findElement(By.xpath("//*[@id=\"notesTable\"]/tbody/tr/td[1]/button"));
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    wait.until(ExpectedConditions.elementToBeClickable(webElement)).click();
   }
 
   // utility to check if page loaded, existence of credential table is used to check
@@ -53,25 +61,36 @@ public class NotesTab {
     return (saveNote.isEnabled());
   }
 
-  public void addNote(WebDriver driver) {
+  public void saveNote(WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(saveNote)).click();
   }
 
   public void addDummyNote(WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, 5);
-    wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).sendKeys("A Note Title");
+    wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).sendKeys(DUMMY_NOTE_TITLE);
     wait.until(ExpectedConditions.elementToBeClickable(noteDescription))
-        .sendKeys("A Note Description");
+        .sendKeys(DUMMY_NOTE_DESC);
   }
 
-  public boolean isNoteInPage() {
+  public void editDummyNote(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, 5);
+    wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).clear();
+    wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).sendKeys(EDITED_NOTE_TITLE);
+    wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).clear();
+    wait.until(ExpectedConditions.elementToBeClickable(noteDescription))
+            .sendKeys(EDITED_NOTE_DESC);
+  }
+
+  public boolean isNoteInPage(String title, String description) {
     // test uses a new user so note will be the first one in the list
     try {
-      WebElement note = notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody/tr/th"));
-    log.warn(note.getAttribute("textContent"));
-      log.warn(note.getAttribute("innerHTML"));
-    return (note.getAttribute("textContent").equalsIgnoreCase("A Note Title"));
+      WebElement noteTitle = notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody/tr/th"));
+      WebElement noteDescription = notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody/tr/td[2]"));
+      log.warn(noteTitle.getAttribute("textContent"));
+      log.warn(noteDescription.getAttribute("textContent"));
+      return (noteTitle.getAttribute("textContent").equalsIgnoreCase(title)
+      && noteDescription.getAttribute("textContent").equalsIgnoreCase(description));
     } catch (NoSuchElementException nse) {
       return false;
     }

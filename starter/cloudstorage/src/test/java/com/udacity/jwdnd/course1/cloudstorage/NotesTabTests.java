@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.setupNoteForUser;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,49 +45,45 @@ class NotesTabTests {
      * Write a Selenium test that logs in an existing user, creates a note and verifies that the
      * note details are visible in the note list.
      */
-    String addNoteUser = "addNoteUser";
-    TestUtils.registerUser(driver, appUrl, addNoteUser);
-    TestUtils.loginUser(driver,appUrl,addNoteUser);
-    // go to Notes tab
-    HomePage homePage = new HomePage(driver);
-    homePage.chooseNotesTab(driver);
-    //
-    NotesTab notesTab = new NotesTab(driver);
-    assertTrue(notesTab.pageLoaded());
-    // add modal
-    notesTab.addNoteModal(driver);
-    // reload page from driver
-    notesTab = new NotesTab(driver);
-    assertTrue(notesTab.addNoteModalLoaded());
-    // add values
-    notesTab.addDummyNote(driver);
-    // submit  modal
-    notesTab.addNote(driver);
-    // redirects to home so need to reselect the Notes tab
-    homePage = new HomePage(driver);
-    homePage.chooseNotesTab(driver);
-    // assert changes show in page
-    notesTab = new NotesTab(driver);
-    assertTrue(notesTab.isNoteInPage());
+    TestUtils.registerUser(driver, appUrl, "addNoteUser");
+    TestUtils.loginUser(driver,appUrl, "addNoteUser");
+    NotesTab notesTab = setupNoteForUser(driver);
     // now delete it
     notesTab.deleteNote(driver);
     // verify deleted
-    homePage = new HomePage(driver);
+    HomePage homePage = new HomePage(driver);
     homePage.chooseNotesTab(driver);
     // assert changes show in page
     notesTab = new NotesTab(driver);
-    assertFalse(notesTab.isNoteInPage());
+    assertFalse(notesTab.isNoteInPage(NotesTab.DUMMY_NOTE_TITLE, NotesTab.DUMMY_NOTE_DESC));
   }
 
   @Test
   public void userCanEditNote() {
-    assertTrue(false);
     /**
      * Write a Selenium test that logs in an existing user with existing notes, clicks the edit note
      * button on an existing note, changes the note data, saves the changes, and verifies that the
      * changes appear in the note list.
      */
+    TestUtils.registerUser(driver, appUrl, "editNoteUser");
+    TestUtils.loginUser(driver,appUrl, "editNoteUser");
+    NotesTab notesTab = setupNoteForUser(driver);
+    // can edit note
+    // edit modal
+    notesTab.editNoteModal(driver);
+    // reload page from driver
+    notesTab = new NotesTab(driver);
+    assertTrue(notesTab.addNoteModalLoaded());
+    // add values
+    notesTab.editDummyNote(driver);
+    // submit  modal
+    notesTab.saveNote(driver);
+    // redirects to home so need to reselect the Notes tab
+    HomePage homePage = new HomePage(driver);
+    homePage.chooseNotesTab(driver);
     // assert changes show in page
-    // assert success message
+    notesTab = new NotesTab(driver);
+    assertTrue(notesTab.isNoteInPage(NotesTab.EDITED_NOTE_TITLE, NotesTab.EDITED_NOTE_DESC));
+    TestUtils.pause(5000);
   }
 }

@@ -23,6 +23,11 @@ public class CredentialService {
         return (credentialMapper.insert(credential, user));
     }
 
+    public int updateCredential (Credential credential, User user) {
+        credential.setKey(hashService.getHashedValue(credential.getPassword(), user.getSalt()));
+        return (credentialMapper.update(credential, user));
+    }
+
     public List<Credential> getCredentials (User user) {
         return credentialMapper.getCredentials(user);
     }

@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
+import com.udacity.jwdnd.course1.cloudstorage.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -30,7 +31,6 @@ public class FilesTab {
 
   public void upload() {
     String fileName = System.getProperty("user.dir") + "/src/test/resources/dummy.md";
-    log.warn(fileName);
     fileUpload.sendKeys(fileName);
     uploadButton.submit();
   }
@@ -59,5 +59,12 @@ public class FilesTab {
         fileTable.findElement(By.xpath("//*[@id='fileTable']/tbody[1]/tr/td/a[2]"));
     JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", element);
+  }
+
+  public void downloadFile(WebDriver driver) {
+    WebElement webElement = fileTable.findElement(By.xpath("//*[@id='fileTable']/tbody/tr/td/a[1]"));
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].click();", webElement);
+    TestUtils.pause(500);   // give time for download to finish
   }
 }

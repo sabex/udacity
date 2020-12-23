@@ -17,7 +17,10 @@ public interface NoteMapper {
       "INSERT INTO NOTES (notetitle, notedescription, userid) " +
               "VALUES(#{note.noteTitle},#{note.noteDescription},#{user.userid})")
   @Options(useGeneratedKeys = true, keyProperty = "note.noteid")
-  Integer insert(Note note, User user);
+  Integer insert(User user, Note note);
+
+  @Update("UPDATE NOTES SET notetitle = #{note.noteTitle} , notedescription = #{note.noteDescription} WHERE userid = #{user.userid} AND noteid = #{note.noteid}")
+  Integer update(User user, Note note);
 
   @Delete("DELETE FROM NOTES WHERE userid = #{user.userid} AND noteid = #{noteId}")
   Integer delete(User user, Integer noteId);
