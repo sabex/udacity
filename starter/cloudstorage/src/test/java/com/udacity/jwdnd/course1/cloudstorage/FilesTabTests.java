@@ -1,8 +1,17 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.setupFileForUser;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.udacity.jwdnd.course1.cloudstorage.page.FilesTab;
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,16 +22,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.setupFileForUser;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j

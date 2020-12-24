@@ -1,6 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,7 +13,7 @@ public class SignupPage {
   @FindBy(id = "inputFirstName")
   WebElement inputFirstName;
 
-  @FindBy(id="inputLastName")
+  @FindBy(id = "inputLastName")
   WebElement inputLastName;
 
   @FindBy(id = "inputUsername")
@@ -32,12 +31,11 @@ public class SignupPage {
   @FindBy(id = "signupSuccess")
   WebElement signupSuccess;
 
-  @FindBy(id="backToLoginLink")
+  @FindBy(id = "backToLoginLink")
   WebElement backToLoginLink;
 
-  @FindBy(id="goToLogonLink")
+  @FindBy(id = "goToLogonLink")
   WebElement goToLogonLink;
-
 
   public SignupPage(WebDriver webDriver) {
     PageFactory.initElements(webDriver, this);
@@ -52,11 +50,11 @@ public class SignupPage {
   }
 
   public boolean signupSuccessful() {
-      return (signupSuccess.getText().contains("You successfully signed up!"));
+    return (signupSuccess.getText().contains("You successfully signed up!"));
   }
 
   public boolean signupFailed() {
-      return ((signupError.getText() != null));
+    return ((signupError.getText() != null));
   }
 
   public void backToLogin() {
@@ -70,6 +68,6 @@ public class SignupPage {
 
   // utility to check if page loaded, existence of signup button is used to check
   public boolean pageLoaded() {
-      return (signupButton.getText().contains("Sign Up"));
+    return (signupButton.getText().contains("Sign Up"));
   }
 }

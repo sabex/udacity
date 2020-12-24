@@ -1,6 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -44,10 +43,10 @@ public class LoginPage {
 
   // utility to check if page loaded, existence of submit button is used to check
   public boolean pageLoaded() {
-      return (submitButton.getText().contains("Login"));
+    return (submitButton.getText().contains("Login"));
   }
 
   public boolean isLoginFailed() {
-      return (invalidCreds.getText().contains("Invalid username or password"));
+    return (invalidCreds.getText().contains("Invalid username or password"));
   }
 }

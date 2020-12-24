@@ -1,15 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
-import com.udacity.jwdnd.course1.cloudstorage.TestUtils;
 import lombok.SneakyThrows;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
 
@@ -28,7 +24,6 @@ public class HomePage {
   @FindBy(id = "nav-credentials-tab")
   private WebElement credentialsTab;
 
-
   public HomePage(WebDriver webDriver) {
     PageFactory.initElements(webDriver, this);
   }
@@ -39,27 +34,27 @@ public class HomePage {
 
   // utility to check if page loaded, existence of logout button is used to check
   public boolean pageLoaded() {
-      return (logoutButton.getText() != null);
+    return (logoutButton.getText() != null);
   }
 
   public void chooseFilesTab(WebDriver driver) {
-    JavascriptExecutor js= (JavascriptExecutor) driver;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", filesTab);
   }
 
   public void chooseNotesTab(WebDriver driver) {
-    JavascriptExecutor js= (JavascriptExecutor) driver;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", notesTab);
   }
 
   @SneakyThrows
   public void chooseCredentialsTab(WebDriver driver) {
-    JavascriptExecutor js= (JavascriptExecutor) driver;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", credentialsTab);
   }
 
   public boolean hasFilesTab() {
-      return (filesTab.getText().contains("Files"));
+    return (filesTab.getText().contains("Files"));
   }
 
   public boolean hasNotesTab() {

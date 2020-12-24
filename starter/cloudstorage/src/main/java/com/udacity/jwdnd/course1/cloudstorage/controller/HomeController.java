@@ -16,12 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -70,14 +66,10 @@ public class HomeController {
     // check if update or create by checking value of credential id
     if (null != credential.getCredentialid() && credential.getCredentialid() > 0) { // update
       Integer result = credentialService.updateCredential(credential, user);
-      if (result < 1) {
-        model.addAttribute("message", "update credential failed");
-      }
+      displayMessage = (result < 1) ? "update credential failed" : "Credential updated";
     } else { // create
       Integer result = credentialService.createCredential(credential, user);
-      if (result < 1) {
-        model.addAttribute("message", "add credential failed");
-      }
+      displayMessage = (result < 1) ? "Add credential failed" : "Credential added";
     }
     return ("redirect:/home");
   }
@@ -87,6 +79,7 @@ public class HomeController {
       @PathVariable Integer credentialId, Authentication authentication) {
     User user = userService.getUser(authentication.getName());
     Integer result = credentialService.deleteCredential(credentialId, user);
+    displayMessage = "Credential deleted successfully";
     return "redirect:/home";
   }
 
@@ -95,16 +88,11 @@ public class HomeController {
     User user = userService.getUser(authentication.getName());
     if (null != note.getNoteid() && note.getNoteid() > 0) { // update
       Integer result = noteService.updateNote(note, user);
-      if (result < 1) {
-        model.addAttribute("message", "update note Failed");
-      }
+      displayMessage = (result < 1) ? "update note failed" : "Note updated";
     } else {
       Integer result = noteService.createNote(note, user);
-      if (result < 1) {
-        model.addAttribute("message", "add note Failed");
-      }
+      displayMessage = (result < 1) ? "Add note failed" : "Note added";
     }
-
     return "redirect:/home";
   }
 
@@ -112,6 +100,7 @@ public class HomeController {
   public String deleteNote(@PathVariable Integer noteId, Authentication authentication) {
     User user = userService.getUser(authentication.getName());
     Integer result = noteService.deleteNote(noteId, user);
+    displayMessage = "Note deleted successfully";
     return "redirect:/home";
   }
 
@@ -123,9 +112,7 @@ public class HomeController {
     User user = userService.getUser(authentication.getName());
     try {
       Integer result = fileService.createFile(uploadedFile, user);
-      if (result < 1) {
-        displayMessage = "add file Failed";
-      }
+      displayMessage = (result < 1) ? "Add file failed" : "File added";
     } catch (Exception exception) {
       displayMessage = exception.getMessage();
     }
@@ -136,18 +123,18 @@ public class HomeController {
   public String deleteFile(@PathVariable Integer fileId, Authentication authentication) {
     User user = userService.getUser(authentication.getName());
     Integer result = fileService.deleteFile(fileId, user);
+    displayMessage = "File deleted successfully";
     return "redirect:/home";
   }
 
   @GetMapping("/file/download/{fileId}")
   public ResponseEntity downloadFile(@PathVariable Integer fileId, Authentication authentication) {
-    log.warn("in controller " + fileId);
     User user = userService.getUser(authentication.getName());
     File file = fileService.getFile(user, fileId);
     return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType(file.getContentType()))
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
-            .body(new ByteArrayResource(file.getFileData()));
-
+        .contentType(MediaType.parseMediaType(file.getContentType()))
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
+        .body(new ByteArrayResource(file.getFileData()));
   }
 }

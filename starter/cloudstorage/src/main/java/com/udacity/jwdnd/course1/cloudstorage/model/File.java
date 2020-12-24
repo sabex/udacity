@@ -2,7 +2,6 @@ package com.udacity.jwdnd.course1.cloudstorage.model;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder

@@ -22,20 +22,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     auth.authenticationProvider(this.authenticationService);
   }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.authorizeRequests()
-          .antMatchers("/signup", "/login", "/css/**", "/js/**")
-          .permitAll()
-          .anyRequest()
-          .authenticated()
-          .and()
-          .logout()
-          .permitAll()
-          .logoutSuccessUrl("/login");
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .antMatchers("/signup", "/login", "/css/**", "/js/**")
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .logout()
+        .permitAll()
+        .logoutSuccessUrl("/login");
 
-      http.formLogin().loginPage("/login").permitAll();
+    http.formLogin().loginPage("/login").permitAll();
 
-      http.formLogin().defaultSuccessUrl("/home", true);
-    }
+    http.formLogin().defaultSuccessUrl("/home", true);
+  }
 }

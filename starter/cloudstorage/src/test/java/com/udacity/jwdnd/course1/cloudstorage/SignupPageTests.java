@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -8,8 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SignupPageTests {
@@ -56,16 +56,16 @@ class SignupPageTests {
 
   @Test
   public void signupSuccessful() {
-    TestUtils.registerUser(driver,appUrl, GOOD_USER_NAME);
+    TestUtils.registerUser(driver, appUrl, GOOD_USER_NAME);
     verifySignup(true);
   }
 
   @Test
   public void signupFailsIfUsernameTaken() {
-    TestUtils.registerUser(driver,appUrl, BAD_USER_NAME);
+    TestUtils.registerUser(driver, appUrl, BAD_USER_NAME);
     verifySignup(true);
     // second attempt with same info fails
-    TestUtils.registerUser(driver,appUrl, BAD_USER_NAME);
+    TestUtils.registerUser(driver, appUrl, BAD_USER_NAME);
     verifySignup(false);
   }
 
@@ -75,7 +75,7 @@ class SignupPageTests {
     if (successExpected) {
       assertTrue(page.signupSuccessful());
       assertTrue(page.hasLinkToLogin());
-      } else{
+    } else {
       assertTrue(page.signupFailed());
     }
   }

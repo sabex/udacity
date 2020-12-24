@@ -54,7 +54,7 @@ class CloudStorageApplicationTests {
 
     // user sees their data after logon again
     loginPage = TestUtils.getLoginPage(driver, appUrl);
-    loginPage.login(E2Eusername,TestUtils.GOOD_PASSWORD);
+    loginPage.login(E2Eusername, TestUtils.GOOD_PASSWORD);
     // check files
     HomePage homePage = TestUtils.getHomePage(driver, appUrl);
     homePage.chooseFilesTab(driver);
@@ -70,14 +70,15 @@ class CloudStorageApplicationTests {
     homePage = TestUtils.getHomePage(driver, appUrl);
     homePage.chooseCredentialsTab(driver);
     CredentialsTab credentialsTab = new CredentialsTab(driver);
-    assertTrue(credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
+    assertTrue(
+        credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
   }
 
   private void addUserData(String E2Eusername) {
     // login with signed up user
     LoginPage loginPage = TestUtils.getLoginPage(driver, appUrl);
     TestUtils.verifyLoginPageLoads(loginPage);
-    loginPage.login(E2Eusername,TestUtils.GOOD_PASSWORD);
+    loginPage.login(E2Eusername, TestUtils.GOOD_PASSWORD);
 
     // verify redirect to Home / login successful
     assertTrue(driver.getCurrentUrl().contains(HomePage.HOME_PATH));
@@ -104,7 +105,7 @@ class CloudStorageApplicationTests {
     addUserData(username);
     // register other user, login and verify no file, cred or note listed
     // register second user and login
-    TestUtils.registerUser(driver,appUrl, "multiusername2");
+    TestUtils.registerUser(driver, appUrl, "multiusername2");
     TestUtils.loginUser(driver, appUrl, "multiusername2");
     // expect no files
     HomePage homePage = TestUtils.getHomePage(driver, appUrl);
@@ -121,7 +122,8 @@ class CloudStorageApplicationTests {
     homePage = TestUtils.getHomePage(driver, appUrl);
     homePage.chooseCredentialsTab(driver);
     CredentialsTab credentialsTab = new CredentialsTab(driver);
-    assertFalse(credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
+    assertFalse(
+        credentialsTab.isCredentialInPage(CredentialsTab.DUMMY_URL, CredentialsTab.DUMMY_USERNAME));
   }
 
   // utility methods

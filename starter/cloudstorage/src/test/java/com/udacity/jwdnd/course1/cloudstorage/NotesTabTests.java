@@ -1,5 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.setupNoteForUser;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
@@ -7,10 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import static com.udacity.jwdnd.course1.cloudstorage.TestUtils.setupNoteForUser;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NotesTabTests {
@@ -46,7 +46,7 @@ class NotesTabTests {
      * note details are visible in the note list.
      */
     TestUtils.registerUser(driver, appUrl, "addNoteUser");
-    TestUtils.loginUser(driver,appUrl, "addNoteUser");
+    TestUtils.loginUser(driver, appUrl, "addNoteUser");
     NotesTab notesTab = setupNoteForUser(driver);
     // now delete it
     notesTab.deleteNote(driver);
@@ -66,7 +66,7 @@ class NotesTabTests {
      * changes appear in the note list.
      */
     TestUtils.registerUser(driver, appUrl, "editNoteUser");
-    TestUtils.loginUser(driver,appUrl, "editNoteUser");
+    TestUtils.loginUser(driver, appUrl, "editNoteUser");
     NotesTab notesTab = setupNoteForUser(driver);
     // can edit note
     // edit modal

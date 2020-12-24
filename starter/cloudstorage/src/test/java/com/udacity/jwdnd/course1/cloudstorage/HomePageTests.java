@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -12,8 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -57,15 +57,15 @@ class HomePageTests {
     verifyUserHasAllTabs(homePage);
 
     homePage.chooseCredentialsTab(driver);
-    homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
+    homePage = new HomePage(driver); // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
 
     homePage.chooseNotesTab(driver);
-    homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
+    homePage = new HomePage(driver); // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
 
     homePage.chooseFilesTab(driver);
-    homePage = new HomePage(driver);   // hidden tabs now enabled so need to refresh page object
+    homePage = new HomePage(driver); // hidden tabs now enabled so need to refresh page object
     verifyUserHasAllTabs(homePage);
   }
 

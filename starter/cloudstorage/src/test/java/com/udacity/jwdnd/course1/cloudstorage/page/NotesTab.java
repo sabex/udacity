@@ -1,6 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
-import com.udacity.jwdnd.course1.cloudstorage.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -46,7 +45,8 @@ public class NotesTab {
   }
 
   public void editNoteModal(WebDriver driver) {
-    WebElement webElement = notesTable.findElement(By.xpath("//*[@id=\"notesTable\"]/tbody/tr/td[1]/button"));
+    WebElement webElement =
+        notesTable.findElement(By.xpath("//*[@id=\"notesTable\"]/tbody/tr/td[1]/button"));
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(webElement)).click();
   }
@@ -69,8 +69,7 @@ public class NotesTab {
   public void addDummyNote(WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, 5);
     wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).sendKeys(DUMMY_NOTE_TITLE);
-    wait.until(ExpectedConditions.elementToBeClickable(noteDescription))
-        .sendKeys(DUMMY_NOTE_DESC);
+    wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).sendKeys(DUMMY_NOTE_DESC);
   }
 
   public void editDummyNote(WebDriver driver) {
@@ -78,27 +77,28 @@ public class NotesTab {
     wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).clear();
     wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).sendKeys(EDITED_NOTE_TITLE);
     wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).clear();
-    wait.until(ExpectedConditions.elementToBeClickable(noteDescription))
-            .sendKeys(EDITED_NOTE_DESC);
+    wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).sendKeys(EDITED_NOTE_DESC);
   }
 
   public boolean isNoteInPage(String title, String description) {
     // test uses a new user so note will be the first one in the list
     try {
       WebElement noteTitle = notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody/tr/th"));
-      WebElement noteDescription = notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody/tr/td[2]"));
+      WebElement noteDescription =
+          notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody/tr/td[2]"));
       log.warn(noteTitle.getAttribute("textContent"));
       log.warn(noteDescription.getAttribute("textContent"));
       return (noteTitle.getAttribute("textContent").equalsIgnoreCase(title)
-      && noteDescription.getAttribute("textContent").equalsIgnoreCase(description));
+          && noteDescription.getAttribute("textContent").equalsIgnoreCase(description));
     } catch (NoSuchElementException nse) {
       return false;
     }
   }
 
   public void deleteNote(WebDriver driver) {
-    WebElement element = notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody[1]/tr/td[1]/a"));
-    JavascriptExecutor js= (JavascriptExecutor) driver;
+    WebElement element =
+        notesTable.findElement(By.xpath("//*[@id='notesTable']/tbody[1]/tr/td[1]/a"));
+    JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", element);
   }
 }

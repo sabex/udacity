@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 @Slf4j
 public class FilesTab {
@@ -62,9 +60,10 @@ public class FilesTab {
   }
 
   public void downloadFile(WebDriver driver) {
-    WebElement webElement = fileTable.findElement(By.xpath("//*[@id='fileTable']/tbody/tr/td/a[1]"));
+    WebElement webElement =
+        fileTable.findElement(By.xpath("//*[@id='fileTable']/tbody/tr/td/a[1]"));
     JavascriptExecutor js = (JavascriptExecutor) driver;
     js.executeScript("arguments[0].click();", webElement);
-    TestUtils.pause(500);   // give time for download to finish
+    TestUtils.pause(500); // give time for download to finish
   }
 }

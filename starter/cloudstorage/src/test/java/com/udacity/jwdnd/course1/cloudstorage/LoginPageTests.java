@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
@@ -10,8 +12,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoginPageTests {
 
@@ -20,7 +20,6 @@ class LoginPageTests {
   private WebDriver driver;
 
   private String appUrl;
-
 
   @BeforeAll
   static void beforeAll() {
